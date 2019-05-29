@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -33,13 +33,13 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/oklog/ulid"
 	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/tsdb/chunkenc"
-	tsdb_errors "github.com/prometheus/tsdb/errors"
-	"github.com/prometheus/tsdb/fileutil"
-	_ "github.com/prometheus/tsdb/goversion"
-	"github.com/prometheus/tsdb/labels"
-	"github.com/prometheus/tsdb/wal"
+	"github.com/dnxware/client_golang/dnxware"
+	"github.com/dnxware/tsdb/chunkenc"
+	tsdb_errors "github.com/dnxware/tsdb/errors"
+	"github.com/dnxware/tsdb/fileutil"
+	_ "github.com/dnxware/tsdb/goversion"
+	"github.com/dnxware/tsdb/labels"
+	"github.com/dnxware/tsdb/wal"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -142,32 +142,32 @@ type DB struct {
 }
 
 type dbMetrics struct {
-	loadedBlocks         prometheus.GaugeFunc
-	symbolTableSize      prometheus.GaugeFunc
-	reloads              prometheus.Counter
-	reloadsFailed        prometheus.Counter
-	compactionsTriggered prometheus.Counter
-	timeRetentionCount   prometheus.Counter
-	compactionsSkipped   prometheus.Counter
-	startTime            prometheus.GaugeFunc
-	tombCleanTimer       prometheus.Histogram
-	blocksBytes          prometheus.Gauge
-	sizeRetentionCount   prometheus.Counter
+	loadedBlocks         dnxware.GaugeFunc
+	symbolTableSize      dnxware.GaugeFunc
+	reloads              dnxware.Counter
+	reloadsFailed        dnxware.Counter
+	compactionsTriggered dnxware.Counter
+	timeRetentionCount   dnxware.Counter
+	compactionsSkipped   dnxware.Counter
+	startTime            dnxware.GaugeFunc
+	tombCleanTimer       dnxware.Histogram
+	blocksBytes          dnxware.Gauge
+	sizeRetentionCount   dnxware.Counter
 }
 
-func newDBMetrics(db *DB, r prometheus.Registerer) *dbMetrics {
+func newDBMetrics(db *DB, r dnxware.Registerer) *dbMetrics {
 	m := &dbMetrics{}
 
-	m.loadedBlocks = prometheus.NewGaugeFunc(prometheus.GaugeOpts{
-		Name: "prometheus_tsdb_blocks_loaded",
+	m.loadedBlocks = dnxware.NewGaugeFunc(dnxware.GaugeOpts{
+		Name: "dnxware_tsdb_blocks_loaded",
 		Help: "Number of currently loaded data blocks",
 	}, func() float64 {
 		db.mtx.RLock()
 		defer db.mtx.RUnlock()
 		return float64(len(db.blocks))
 	})
-	m.symbolTableSize = prometheus.NewGaugeFunc(prometheus.GaugeOpts{
-		Name: "prometheus_tsdb_symbol_table_size_bytes",
+	m.symbolTableSize = dnxware.NewGaugeFunc(dnxware.GaugeOpts{
+		Name: "dnxware_tsdb_symbol_table_size_bytes",
 		Help: "Size of symbol table on disk (in bytes)",
 	}, func() float64 {
 		db.mtx.RLock()
@@ -179,28 +179,28 @@ func newDBMetrics(db *DB, r prometheus.Registerer) *dbMetrics {
 		}
 		return float64(symTblSize)
 	})
-	m.reloads = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_reloads_total",
+	m.reloads = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_reloads_total",
 		Help: "Number of times the database reloaded block data from disk.",
 	})
-	m.reloadsFailed = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_reloads_failures_total",
+	m.reloadsFailed = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_reloads_failures_total",
 		Help: "Number of times the database failed to reload block data from disk.",
 	})
-	m.compactionsTriggered = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_compactions_triggered_total",
+	m.compactionsTriggered = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_compactions_triggered_total",
 		Help: "Total number of triggered compactions for the partition.",
 	})
-	m.timeRetentionCount = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_time_retentions_total",
+	m.timeRetentionCount = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_time_retentions_total",
 		Help: "The number of times that blocks were deleted because the maximum time limit was exceeded.",
 	})
-	m.compactionsSkipped = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_compactions_skipped_total",
+	m.compactionsSkipped = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_compactions_skipped_total",
 		Help: "Total number of skipped compactions due to disabled auto compaction.",
 	})
-	m.startTime = prometheus.NewGaugeFunc(prometheus.GaugeOpts{
-		Name: "prometheus_tsdb_lowest_timestamp",
+	m.startTime = dnxware.NewGaugeFunc(dnxware.GaugeOpts{
+		Name: "dnxware_tsdb_lowest_timestamp",
 		Help: "Lowest timestamp value stored in the database. The unit is decided by the library consumer.",
 	}, func() float64 {
 		db.mtx.RLock()
@@ -210,16 +210,16 @@ func newDBMetrics(db *DB, r prometheus.Registerer) *dbMetrics {
 		}
 		return float64(db.blocks[0].meta.MinTime)
 	})
-	m.tombCleanTimer = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Name: "prometheus_tsdb_tombstone_cleanup_seconds",
+	m.tombCleanTimer = dnxware.NewHistogram(dnxware.HistogramOpts{
+		Name: "dnxware_tsdb_tombstone_cleanup_seconds",
 		Help: "The time taken to recompact blocks to remove tombstones.",
 	})
-	m.blocksBytes = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "prometheus_tsdb_storage_blocks_bytes",
+	m.blocksBytes = dnxware.NewGauge(dnxware.GaugeOpts{
+		Name: "dnxware_tsdb_storage_blocks_bytes",
 		Help: "The number of bytes that are currently used for local storage by all blocks.",
 	})
-	m.sizeRetentionCount = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_size_retentions_total",
+	m.sizeRetentionCount = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_size_retentions_total",
 		Help: "The number of times that blocks were deleted because the maximum number of bytes was exceeded.",
 	})
 
@@ -241,7 +241,7 @@ func newDBMetrics(db *DB, r prometheus.Registerer) *dbMetrics {
 }
 
 // Open returns a new DB in the given directory.
-func Open(dir string, l log.Logger, r prometheus.Registerer, opts *Options) (db *DB, err error) {
+func Open(dir string, l log.Logger, r dnxware.Registerer, opts *Options) (db *DB, err error) {
 	if err := os.MkdirAll(dir, 0777); err != nil {
 		return nil, err
 	}
@@ -251,7 +251,7 @@ func Open(dir string, l log.Logger, r prometheus.Registerer, opts *Options) (db 
 	if opts == nil {
 		opts = DefaultOptions
 	}
-	// Fixup bad format written by Prometheus 2.1.
+	// Fixup bad format written by dnxware 2.1.
 	if err := repairBadIndexVersion(l, dir); err != nil {
 		return nil, err
 	}

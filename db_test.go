@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -28,14 +28,14 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/oklog/ulid"
 	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	prom_testutil "github.com/prometheus/client_golang/prometheus/testutil"
-	"github.com/prometheus/tsdb/chunks"
-	"github.com/prometheus/tsdb/index"
-	"github.com/prometheus/tsdb/labels"
-	"github.com/prometheus/tsdb/testutil"
-	"github.com/prometheus/tsdb/tsdbutil"
-	"github.com/prometheus/tsdb/wal"
+	"github.com/dnxware/client_golang/dnxware"
+	prom_testutil "github.com/dnxware/client_golang/dnxware/testutil"
+	"github.com/dnxware/tsdb/chunks"
+	"github.com/dnxware/tsdb/index"
+	"github.com/dnxware/tsdb/labels"
+	"github.com/dnxware/tsdb/testutil"
+	"github.com/dnxware/tsdb/tsdbutil"
+	"github.com/dnxware/tsdb/wal"
 )
 
 func openTestDB(t testing.TB, opts *Options) (db *DB, close func()) {
@@ -594,12 +594,12 @@ func TestDB_e2e(t *testing.T) {
 		{
 			{"a", "b"},
 			{"instance", "localhost:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "b"},
 			{"instance", "127.0.0.1:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "b"},
@@ -614,12 +614,12 @@ func TestDB_e2e(t *testing.T) {
 		{
 			{"a", "c"},
 			{"instance", "localhost:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "c"},
 			{"instance", "127.0.0.1:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "c"},
@@ -684,7 +684,7 @@ func TestDB_e2e(t *testing.T) {
 			ms: []labels.Matcher{
 				labels.NewEqualMatcher("a", "c"),
 				labels.NewEqualMatcher("instance", "localhost:9090"),
-				labels.NewEqualMatcher("job", "prometheus"),
+				labels.NewEqualMatcher("job", "dnxware"),
 			},
 		},
 		// TODO: Add Regexp Matchers.
@@ -1276,7 +1276,7 @@ func TestOverlappingBlocksDetectsAllOverlaps(t *testing.T) {
 	}, OverlappingBlocks(nc1))
 }
 
-// Regression test for https://github.com/prometheus/tsdb/issues/347
+// Regression test for https://github.com/dnxware/tsdb/issues/347
 func TestChunkAtBlockBoundary(t *testing.T) {
 	db, delete := openTestDB(t, nil)
 	defer func() {
@@ -1471,7 +1471,7 @@ func TestInitializeHeadTimestamp(t *testing.T) {
 		testutil.Ok(t, err)
 		testutil.Ok(t, w.Close())
 
-		r := prometheus.NewRegistry()
+		r := dnxware.NewRegistry()
 
 		db, err := Open(dir, nil, r, nil)
 		testutil.Ok(t, err)

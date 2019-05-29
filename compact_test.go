@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,11 +26,11 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/pkg/errors"
-	prom_testutil "github.com/prometheus/client_golang/prometheus/testutil"
-	"github.com/prometheus/tsdb/chunks"
-	"github.com/prometheus/tsdb/fileutil"
-	"github.com/prometheus/tsdb/labels"
-	"github.com/prometheus/tsdb/testutil"
+	prom_testutil "github.com/dnxware/client_golang/dnxware/testutil"
+	"github.com/dnxware/tsdb/chunks"
+	"github.com/dnxware/tsdb/fileutil"
+	"github.com/dnxware/tsdb/labels"
+	"github.com/dnxware/tsdb/testutil"
 )
 
 func TestSplitByRange(t *testing.T) {
@@ -136,7 +136,7 @@ func TestSplitByRange(t *testing.T) {
 	}
 }
 
-// See https://github.com/prometheus/prometheus/issues/3064
+// See https://github.com/dnxware/dnxware/issues/3064
 func TestNoPanicFor0Tombstones(t *testing.T) {
 	metas := []dirMeta{
 		{
@@ -652,7 +652,7 @@ func TestCompaction_populateBlock(t *testing.T) {
 			expErr:         errors.New("found chunk with minTime: 10 maxTime: 30 outside of compacted minTime: 0 maxTime: 20"),
 		},
 		{
-			// Introduced by https://github.com/prometheus/tsdb/issues/347.
+			// Introduced by https://github.com/dnxware/tsdb/issues/347.
 			title: "Populate from single block containing extra chunk",
 			inputSeriesSamples: [][]seriesSamples{
 				{
@@ -692,7 +692,7 @@ func TestCompaction_populateBlock(t *testing.T) {
 			},
 		},
 		{
-			// Introduced by https://github.com/prometheus/tsdb/pull/539.
+			// Introduced by https://github.com/dnxware/tsdb/pull/539.
 			title: "Populate from three blocks that the last two are overlapping.",
 			inputSeriesSamples: [][]seriesSamples{
 				{

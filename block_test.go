@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -24,12 +24,12 @@ import (
 	"testing"
 
 	"github.com/go-kit/kit/log"
-	"github.com/prometheus/tsdb/chunks"
-	"github.com/prometheus/tsdb/testutil"
-	"github.com/prometheus/tsdb/tsdbutil"
+	"github.com/dnxware/tsdb/chunks"
+	"github.com/dnxware/tsdb/testutil"
+	"github.com/dnxware/tsdb/tsdbutil"
 )
 
-// In Prometheus 2.1.0 we had a bug where the meta.json version was falsely bumped
+// In dnxware 2.1.0 we had a bug where the meta.json version was falsely bumped
 // to 2. We had a migration in place resetting it to 1 but we should move immediately to
 // version 3 next time to avoid confusion and issues.
 func TestBlockMetaMustNeverBeVersion2(t *testing.T) {

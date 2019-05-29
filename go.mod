@@ -1,4 +1,4 @@
-module github.com/prometheus/tsdb
+module github.com/dnxware/tsdb
 
 require (
 	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
@@ -17,10 +17,10 @@ require (
 	github.com/oklog/ulid v1.3.1
 	github.com/pkg/errors v0.8.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v0.9.1
-	github.com/prometheus/client_model v0.0.0-20180712105110-5c3871d89910 // indirect
-	github.com/prometheus/common v0.0.0-20181113130724-41aa239b4cce // indirect
-	github.com/prometheus/procfs v0.0.0-20181005140218-185b4288413d // indirect
+	github.com/dnxware/client_golang v0.9.1
+	github.com/dnxware/client_model v0.0.0-20180712105110-5c3871d89910 // indirect
+	github.com/dnxware/common v0.0.0-20181113130724-41aa239b4cce // indirect
+	github.com/dnxware/procfs v0.0.0-20181005140218-185b4288413d // indirect
 	github.com/stretchr/testify v1.2.2 // indirect
 	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f
 	golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8

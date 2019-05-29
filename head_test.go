@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,14 +23,14 @@ import (
 	"sort"
 	"testing"
 
-	prom_testutil "github.com/prometheus/client_golang/prometheus/testutil"
-	"github.com/prometheus/tsdb/chunkenc"
-	"github.com/prometheus/tsdb/chunks"
-	"github.com/prometheus/tsdb/index"
-	"github.com/prometheus/tsdb/labels"
-	"github.com/prometheus/tsdb/testutil"
-	"github.com/prometheus/tsdb/tsdbutil"
-	"github.com/prometheus/tsdb/wal"
+	prom_testutil "github.com/dnxware/client_golang/dnxware/testutil"
+	"github.com/dnxware/tsdb/chunkenc"
+	"github.com/dnxware/tsdb/chunks"
+	"github.com/dnxware/tsdb/index"
+	"github.com/dnxware/tsdb/labels"
+	"github.com/dnxware/tsdb/testutil"
+	"github.com/dnxware/tsdb/tsdbutil"
+	"github.com/dnxware/tsdb/wal"
 )
 
 func BenchmarkCreateSeries(b *testing.B) {
@@ -564,12 +564,12 @@ func TestDelete_e2e(t *testing.T) {
 		{
 			{"a", "b"},
 			{"instance", "localhost:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "b"},
 			{"instance", "127.0.0.1:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "b"},
@@ -584,12 +584,12 @@ func TestDelete_e2e(t *testing.T) {
 		{
 			{"a", "c"},
 			{"instance", "localhost:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "c"},
 			{"instance", "127.0.0.1:9090"},
-			{"job", "prometheus"},
+			{"job", "dnxware"},
 		},
 		{
 			{"a", "c"},
@@ -648,7 +648,7 @@ func TestDelete_e2e(t *testing.T) {
 			ms: []labels.Matcher{
 				labels.NewEqualMatcher("a", "c"),
 				labels.NewEqualMatcher("instance", "localhost:9090"),
-				labels.NewEqualMatcher("job", "prometheus"),
+				labels.NewEqualMatcher("job", "dnxware"),
 			},
 			drange: Intervals{{300, 400}, {100, 6700}},
 		},

@@ -1,4 +1,4 @@
-// Copyright 2018 The Prometheus Authors
+// Copyright 2018 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -23,14 +23,14 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
-	tsdb_errors "github.com/prometheus/tsdb/errors"
-	"github.com/prometheus/tsdb/fileutil"
+	tsdb_errors "github.com/dnxware/tsdb/errors"
+	"github.com/dnxware/tsdb/fileutil"
 )
 
 // repairBadIndexVersion repairs an issue in index and meta.json persistence introduced in
 // commit 129773b41a565fde5156301e37f9a87158030443.
 func repairBadIndexVersion(logger log.Logger, dir string) error {
-	// All blocks written by Prometheus 2.1 with a meta.json version of 2 are affected.
+	// All blocks written by dnxware 2.1 with a meta.json version of 2 are affected.
 	// We must actually set the index file version to 2 and revert the meta.json version back to 1.
 	dirs, err := blockDirs(dir)
 	if err != nil {

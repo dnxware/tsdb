@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -26,9 +26,9 @@ import (
 	"strconv"
 
 	"github.com/pkg/errors"
-	"github.com/prometheus/tsdb/chunkenc"
-	tsdb_errors "github.com/prometheus/tsdb/errors"
-	"github.com/prometheus/tsdb/fileutil"
+	"github.com/dnxware/tsdb/chunkenc"
+	tsdb_errors "github.com/dnxware/tsdb/errors"
+	"github.com/dnxware/tsdb/fileutil"
 )
 
 const (

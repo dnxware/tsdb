@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -16,7 +16,7 @@ package goversion_test
 import (
 	"testing"
 
-	_ "github.com/prometheus/tsdb/goversion"
+	_ "github.com/dnxware/tsdb/goversion"
 )
 
 // This test is is intentionally blank and exists only so `go test` believes

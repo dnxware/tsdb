@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/tsdb/fileutil"
+	"github.com/dnxware/client_golang/dnxware"
+	"github.com/dnxware/tsdb/fileutil"
 )
 
 const (
@@ -166,22 +166,22 @@ type WAL struct {
 	actorc      chan func()
 	closed      bool // To allow calling Close() more than once without blocking.
 
-	fsyncDuration   prometheus.Summary
-	pageFlushes     prometheus.Counter
-	pageCompletions prometheus.Counter
-	truncateFail    prometheus.Counter
-	truncateTotal   prometheus.Counter
-	currentSegment  prometheus.Gauge
+	fsyncDuration   dnxware.Summary
+	pageFlushes     dnxware.Counter
+	pageCompletions dnxware.Counter
+	truncateFail    dnxware.Counter
+	truncateTotal   dnxware.Counter
+	currentSegment  dnxware.Gauge
 }
 
 // New returns a new WAL over the given directory.
-func New(logger log.Logger, reg prometheus.Registerer, dir string) (*WAL, error) {
+func New(logger log.Logger, reg dnxware.Registerer, dir string) (*WAL, error) {
 	return NewSize(logger, reg, dir, DefaultSegmentSize)
 }
 
 // NewSize returns a new WAL over the given directory.
 // New segments are created with the specified size.
-func NewSize(logger log.Logger, reg prometheus.Registerer, dir string, segmentSize int) (*WAL, error) {
+func NewSize(logger log.Logger, reg dnxware.Registerer, dir string, segmentSize int) (*WAL, error) {
 	if segmentSize%pageSize != 0 {
 		return nil, errors.New("invalid segment size")
 	}
@@ -199,28 +199,28 @@ func NewSize(logger log.Logger, reg prometheus.Registerer, dir string, segmentSi
 		actorc:      make(chan func(), 100),
 		stopc:       make(chan chan struct{}),
 	}
-	w.fsyncDuration = prometheus.NewSummary(prometheus.SummaryOpts{
-		Name: "prometheus_tsdb_wal_fsync_duration_seconds",
+	w.fsyncDuration = dnxware.NewSummary(dnxware.SummaryOpts{
+		Name: "dnxware_tsdb_wal_fsync_duration_seconds",
 		Help: "Duration of WAL fsync.",
 	})
-	w.pageFlushes = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_wal_page_flushes_total",
+	w.pageFlushes = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_wal_page_flushes_total",
 		Help: "Total number of page flushes.",
 	})
-	w.pageCompletions = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_wal_completed_pages_total",
+	w.pageCompletions = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_wal_completed_pages_total",
 		Help: "Total number of completed pages.",
 	})
-	w.truncateFail = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_wal_truncations_failed_total",
+	w.truncateFail = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_wal_truncations_failed_total",
 		Help: "Total number of WAL truncations that failed.",
 	})
-	w.truncateTotal = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_wal_truncations_total",
+	w.truncateTotal = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_wal_truncations_total",
 		Help: "Total number of WAL truncations attempted.",
 	})
-	w.currentSegment = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "prometheus_tsdb_wal_segment_current",
+	w.currentSegment = dnxware.NewGauge(dnxware.GaugeOpts{
+		Name: "dnxware_tsdb_wal_segment_current",
 		Help: "WAL segment index that TSDB is currently writing to.",
 	})
 	if reg != nil {

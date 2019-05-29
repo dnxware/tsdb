@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -153,7 +153,7 @@ func (a *xorAppender) Append(t int64, v float64) {
 		tDelta = uint64(t - a.t)
 		dod := int64(tDelta - a.tDelta)
 
-		// Gorilla has a max resolution of seconds, Prometheus milliseconds.
+		// Gorilla has a max resolution of seconds, dnxware milliseconds.
 		// Thus we use higher value range steps with larger bit size.
 		switch {
 		case dod == 0:

@@ -1,4 +1,4 @@
-# Copyright 2018 The Prometheus Authors
+# Copyright 2018 The dnxware Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -12,8 +12,8 @@
 # limitations under the License.
 
 
-# A common Makefile that includes rules to be reused in different prometheus projects.
-# !!! Open PRs only against the prometheus/prometheus/Makefile.common repository!
+# A common Makefile that includes rules to be reused in different dnxware projects.
+# !!! Open PRs only against the dnxware/dnxware/Makefile.common repository!
 
 # Example usage :
 # Create the main Makefile in the root project directory.
@@ -70,7 +70,7 @@ else
 endif
 
 PROMU_VERSION ?= 0.4.0
-PROMU_URL     := https://github.com/prometheus/promu/releases/download/v$(PROMU_VERSION)/promu-$(PROMU_VERSION).$(GO_BUILD_PLATFORM).tar.gz
+PROMU_URL     := https://github.com/dnxware/promu/releases/download/v$(PROMU_VERSION)/promu-$(PROMU_VERSION).$(GO_BUILD_PLATFORM).tar.gz
 
 GOLANGCI_LINT :=
 GOLANGCI_LINT_OPTS ?=

@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -33,9 +33,9 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/pkg/errors"
-	"github.com/prometheus/tsdb"
-	"github.com/prometheus/tsdb/chunks"
-	"github.com/prometheus/tsdb/labels"
+	"github.com/dnxware/tsdb"
+	"github.com/dnxware/tsdb/chunks"
+	"github.com/dnxware/tsdb/labels"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -165,7 +165,7 @@ func (b *writeBenchmark) run() {
 		}
 		defer f.Close()
 
-		labels, err = readPrometheusLabels(f, b.numMetrics)
+		labels, err = readdnxwareLabels(f, b.numMetrics)
 		if err != nil {
 			exitWithError(err)
 		}
@@ -358,7 +358,7 @@ func measureTime(stage string, f func()) time.Duration {
 	return time.Since(start)
 }
 
-func readPrometheusLabels(r io.Reader, n int) ([]labels.Labels, error) {
+func readdnxwareLabels(r io.Reader, n int) ([]labels.Labels, error) {
 	scanner := bufio.NewScanner(r)
 
 	var mets []labels.Labels
@@ -424,7 +424,7 @@ func getFormatedTime(timestamp int64, humanReadable *bool) string {
 func analyzeBlock(b *tsdb.Block, limit int) {
 	fmt.Printf("Block path: %s\n", b.Dir())
 	meta := b.Meta()
-	// Presume 1ms resolution that Prometheus uses.
+	// Presume 1ms resolution that dnxware uses.
 	fmt.Printf("Duration: %s\n", (time.Duration(meta.MaxTime-meta.MinTime) * 1e6).String())
 	fmt.Printf("Series: %d\n", meta.Stats.NumSeries)
 	ir, err := b.Index()

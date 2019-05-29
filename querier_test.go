@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -24,12 +24,12 @@ import (
 	"testing"
 
 	"github.com/pkg/errors"
-	"github.com/prometheus/tsdb/chunkenc"
-	"github.com/prometheus/tsdb/chunks"
-	"github.com/prometheus/tsdb/index"
-	"github.com/prometheus/tsdb/labels"
-	"github.com/prometheus/tsdb/testutil"
-	"github.com/prometheus/tsdb/tsdbutil"
+	"github.com/dnxware/tsdb/chunkenc"
+	"github.com/dnxware/tsdb/chunks"
+	"github.com/dnxware/tsdb/index"
+	"github.com/dnxware/tsdb/labels"
+	"github.com/dnxware/tsdb/testutil"
+	"github.com/dnxware/tsdb/tsdbutil"
 )
 
 type mockSeriesSet struct {
@@ -103,13 +103,13 @@ func TestMergedSeriesSet(t *testing.T) {
 		{
 			a: newMockSeriesSet([]Series{
 				newSeries(map[string]string{
-					"handler":  "prometheus",
+					"handler":  "dnxware",
 					"instance": "127.0.0.1:9090",
 				}, []tsdbutil.Sample{
 					sample{t: 1, v: 1},
 				}),
 				newSeries(map[string]string{
-					"handler":  "prometheus",
+					"handler":  "dnxware",
 					"instance": "localhost:9090",
 				}, []tsdbutil.Sample{
 					sample{t: 1, v: 2},
@@ -117,7 +117,7 @@ func TestMergedSeriesSet(t *testing.T) {
 			}),
 			b: newMockSeriesSet([]Series{
 				newSeries(map[string]string{
-					"handler":  "prometheus",
+					"handler":  "dnxware",
 					"instance": "127.0.0.1:9090",
 				}, []tsdbutil.Sample{
 					sample{t: 2, v: 1},
@@ -131,14 +131,14 @@ func TestMergedSeriesSet(t *testing.T) {
 			}),
 			exp: newMockSeriesSet([]Series{
 				newSeries(map[string]string{
-					"handler":  "prometheus",
+					"handler":  "dnxware",
 					"instance": "127.0.0.1:9090",
 				}, []tsdbutil.Sample{
 					sample{t: 1, v: 1},
 					sample{t: 2, v: 1},
 				}),
 				newSeries(map[string]string{
-					"handler":  "prometheus",
+					"handler":  "dnxware",
 					"instance": "localhost:9090",
 				}, []tsdbutil.Sample{
 					sample{t: 1, v: 2},
@@ -1043,7 +1043,7 @@ func TestSeriesIterator(t *testing.T) {
 	})
 }
 
-// Regression for: https://github.com/prometheus/tsdb/pull/97
+// Regression for: https://github.com/dnxware/tsdb/pull/97
 func TestChunkSeriesIterator_DoubleSeek(t *testing.T) {
 	chkMetas := []chunks.Meta{
 		tsdbutil.ChunkFromSamples([]tsdbutil.Sample{}),

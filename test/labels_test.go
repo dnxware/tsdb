@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -18,7 +18,7 @@ import (
 	"crypto/rand"
 	"testing"
 
-	"github.com/prometheus/tsdb/labels"
+	"github.com/dnxware/tsdb/labels"
 )
 
 func BenchmarkMapClone(b *testing.B) {
@@ -29,7 +29,7 @@ func BenchmarkMapClone(b *testing.B) {
 		"method":     "GET",
 		"namespace":  "system",
 		"status":     "500",
-		"prometheus": "prometheus-core-1",
+		"dnxware": "dnxware-core-1",
 		"datacenter": "eu-west-1",
 		"pod_name":   "abcdef-99999-defee",
 	}
@@ -51,7 +51,7 @@ func BenchmarkLabelsClone(b *testing.B) {
 		"method":     "GET",
 		"namespace":  "system",
 		"status":     "500",
-		"prometheus": "prometheus-core-1",
+		"dnxware": "dnxware-core-1",
 		"datacenter": "eu-west-1",
 		"pod_name":   "abcdef-99999-defee",
 	}
@@ -72,7 +72,7 @@ func BenchmarkLabelMapAccess(b *testing.B) {
 		"method":     "GET",
 		"namespace":  "system",
 		"status":     "500",
-		"prometheus": "prometheus-core-1",
+		"dnxware": "dnxware-core-1",
 		"datacenter": "eu-west-1",
 		"pod_name":   "abcdef-99999-defee",
 	}
@@ -98,7 +98,7 @@ func BenchmarkLabelSetAccess(b *testing.B) {
 		"method":     "GET",
 		"namespace":  "system",
 		"status":     "500",
-		"prometheus": "prometheus-core-1",
+		"dnxware": "dnxware-core-1",
 		"datacenter": "eu-west-1",
 		"pod_name":   "abcdef-99999-defee",
 	}

@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -13,7 +13,7 @@
 
 // The code in this file was largely written by Damian Gryski as part of
 // https://github.com/dgryski/go-tsz and published under the license below.
-// It received minor modifications to suit Prometheus's needs.
+// It received minor modifications to suit dnxware's needs.
 
 // Copyright (c) 2015,2016 Damian Gryski <damian@gryski.com>
 // All rights reserved.

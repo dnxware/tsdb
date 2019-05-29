@@ -1,4 +1,4 @@
-// Copyright 2019 The Prometheus Authors
+// Copyright 2019 The dnxware Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/dnxware/client_golang/dnxware"
+	"github.com/dnxware/client_golang/dnxware/promauto"
 )
 
 var (
-	readerCorruptionErrors = promauto.NewCounterVec(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_wal_reader_corruption_errors",
+	readerCorruptionErrors = promauto.NewCounterVec(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_wal_reader_corruption_errors",
 		Help: "Errors encountered when reading the WAL.",
 	}, []string{"error"})
 )

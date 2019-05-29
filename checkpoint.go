@@ -1,4 +1,4 @@
-// Copyright 2018 The Prometheus Authors
+// Copyright 2018 The dnxware Authors
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
-	tsdb_errors "github.com/prometheus/tsdb/errors"
-	"github.com/prometheus/tsdb/fileutil"
-	"github.com/prometheus/tsdb/wal"
+	tsdb_errors "github.com/dnxware/tsdb/errors"
+	"github.com/dnxware/tsdb/fileutil"
+	"github.com/dnxware/tsdb/wal"
 )
 
 // CheckpointStats returns stats about a created checkpoint.

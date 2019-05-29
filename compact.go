@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -28,13 +28,13 @@ import (
 	"github.com/go-kit/kit/log/level"
 	"github.com/oklog/ulid"
 	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/tsdb/chunkenc"
-	"github.com/prometheus/tsdb/chunks"
-	tsdb_errors "github.com/prometheus/tsdb/errors"
-	"github.com/prometheus/tsdb/fileutil"
-	"github.com/prometheus/tsdb/index"
-	"github.com/prometheus/tsdb/labels"
+	"github.com/dnxware/client_golang/dnxware"
+	"github.com/dnxware/tsdb/chunkenc"
+	"github.com/dnxware/tsdb/chunks"
+	tsdb_errors "github.com/dnxware/tsdb/errors"
+	"github.com/dnxware/tsdb/fileutil"
+	"github.com/dnxware/tsdb/index"
+	"github.com/dnxware/tsdb/labels"
 )
 
 // ExponentialBlockRanges returns the time ranges based on the stepSize.
@@ -82,54 +82,54 @@ type LeveledCompactor struct {
 }
 
 type compactorMetrics struct {
-	ran               prometheus.Counter
-	populatingBlocks  prometheus.Gauge
-	failed            prometheus.Counter
-	overlappingBlocks prometheus.Counter
-	duration          prometheus.Histogram
-	chunkSize         prometheus.Histogram
-	chunkSamples      prometheus.Histogram
-	chunkRange        prometheus.Histogram
+	ran               dnxware.Counter
+	populatingBlocks  dnxware.Gauge
+	failed            dnxware.Counter
+	overlappingBlocks dnxware.Counter
+	duration          dnxware.Histogram
+	chunkSize         dnxware.Histogram
+	chunkSamples      dnxware.Histogram
+	chunkRange        dnxware.Histogram
 }
 
-func newCompactorMetrics(r prometheus.Registerer) *compactorMetrics {
+func newCompactorMetrics(r dnxware.Registerer) *compactorMetrics {
 	m := &compactorMetrics{}
 
-	m.ran = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_compactions_total",
+	m.ran = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_compactions_total",
 		Help: "Total number of compactions that were executed for the partition.",
 	})
-	m.populatingBlocks = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "prometheus_tsdb_compaction_populating_block",
+	m.populatingBlocks = dnxware.NewGauge(dnxware.GaugeOpts{
+		Name: "dnxware_tsdb_compaction_populating_block",
 		Help: "Set to 1 when a block is currently being written to the disk.",
 	})
-	m.failed = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_compactions_failed_total",
+	m.failed = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_compactions_failed_total",
 		Help: "Total number of compactions that failed for the partition.",
 	})
-	m.overlappingBlocks = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_vertical_compactions_total",
+	m.overlappingBlocks = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_vertical_compactions_total",
 		Help: "Total number of compactions done on overlapping blocks.",
 	})
-	m.duration = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Name:    "prometheus_tsdb_compaction_duration_seconds",
+	m.duration = dnxware.NewHistogram(dnxware.HistogramOpts{
+		Name:    "dnxware_tsdb_compaction_duration_seconds",
 		Help:    "Duration of compaction runs",
-		Buckets: prometheus.ExponentialBuckets(1, 2, 10),
+		Buckets: dnxware.ExponentialBuckets(1, 2, 10),
 	})
-	m.chunkSize = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Name:    "prometheus_tsdb_compaction_chunk_size_bytes",
+	m.chunkSize = dnxware.NewHistogram(dnxware.HistogramOpts{
+		Name:    "dnxware_tsdb_compaction_chunk_size_bytes",
 		Help:    "Final size of chunks on their first compaction",
-		Buckets: prometheus.ExponentialBuckets(32, 1.5, 12),
+		Buckets: dnxware.ExponentialBuckets(32, 1.5, 12),
 	})
-	m.chunkSamples = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Name:    "prometheus_tsdb_compaction_chunk_samples",
+	m.chunkSamples = dnxware.NewHistogram(dnxware.HistogramOpts{
+		Name:    "dnxware_tsdb_compaction_chunk_samples",
 		Help:    "Final number of samples on their first compaction",
-		Buckets: prometheus.ExponentialBuckets(4, 1.5, 12),
+		Buckets: dnxware.ExponentialBuckets(4, 1.5, 12),
 	})
-	m.chunkRange = prometheus.NewHistogram(prometheus.HistogramOpts{
-		Name:    "prometheus_tsdb_compaction_chunk_range_seconds",
+	m.chunkRange = dnxware.NewHistogram(dnxware.HistogramOpts{
+		Name:    "dnxware_tsdb_compaction_chunk_range_seconds",
 		Help:    "Final time range of chunks on their first compaction",
-		Buckets: prometheus.ExponentialBuckets(100, 4, 10),
+		Buckets: dnxware.ExponentialBuckets(100, 4, 10),
 	})
 
 	if r != nil {
@@ -148,7 +148,7 @@ func newCompactorMetrics(r prometheus.Registerer) *compactorMetrics {
 }
 
 // NewLeveledCompactor returns a LeveledCompactor.
-func NewLeveledCompactor(ctx context.Context, r prometheus.Registerer, l log.Logger, ranges []int64, pool chunkenc.Pool) (*LeveledCompactor, error) {
+func NewLeveledCompactor(ctx context.Context, r dnxware.Registerer, l log.Logger, ranges []int64, pool chunkenc.Pool) (*LeveledCompactor, error) {
 	if len(ranges) == 0 {
 		return nil, errors.Errorf("at least one range must be provided")
 	}
@@ -511,9 +511,9 @@ func (c *LeveledCompactor) Write(dest string, b BlockReader, mint, maxt int64, p
 type instrumentedChunkWriter struct {
 	ChunkWriter
 
-	size    prometheus.Histogram
-	samples prometheus.Histogram
-	trange  prometheus.Histogram
+	size    dnxware.Histogram
+	samples dnxware.Histogram
+	trange  dnxware.Histogram
 }
 
 func (w *instrumentedChunkWriter) WriteChunks(chunks ...chunks.Meta) error {

@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,9 +14,9 @@
 package tsdb
 
 import (
-	"github.com/prometheus/tsdb/chunks"
-	"github.com/prometheus/tsdb/index"
-	"github.com/prometheus/tsdb/labels"
+	"github.com/dnxware/tsdb/chunks"
+	"github.com/dnxware/tsdb/index"
+	"github.com/dnxware/tsdb/labels"
 )
 
 type mockIndexWriter struct {

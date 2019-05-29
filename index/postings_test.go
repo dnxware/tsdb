@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -20,7 +20,7 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/prometheus/tsdb/testutil"
+	"github.com/dnxware/tsdb/testutil"
 )
 
 func TestMemPostings_addFor(t *testing.T) {
@@ -193,7 +193,7 @@ func TestMultiIntersect(t *testing.T) {
 			res: []uint64{2, 5, 6, 1001},
 		},
 		// One of the reproduceable cases for:
-		// https://github.com/prometheus/prometheus/issues/2616
+		// https://github.com/dnxware/dnxware/issues/2616
 		// The initialisation of intersectPostings was moving the iterator forward
 		// prematurely making us miss some postings.
 		{
@@ -666,7 +666,7 @@ func TestBigEndian(t *testing.T) {
 
 func TestIntersectWithMerge(t *testing.T) {
 	// One of the reproducible cases for:
-	// https://github.com/prometheus/prometheus/issues/2616
+	// https://github.com/dnxware/dnxware/issues/2616
 	a := newListPostings(21, 22, 23, 24, 25, 30)
 
 	b := Merge(

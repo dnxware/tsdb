@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -27,10 +27,10 @@ import (
 	"time"
 
 	"github.com/go-kit/kit/log"
-	"github.com/prometheus/tsdb/fileutil"
-	"github.com/prometheus/tsdb/labels"
-	"github.com/prometheus/tsdb/testutil"
-	"github.com/prometheus/tsdb/wal"
+	"github.com/dnxware/tsdb/fileutil"
+	"github.com/dnxware/tsdb/labels"
+	"github.com/dnxware/tsdb/testutil"
+	"github.com/dnxware/tsdb/wal"
 )
 
 func TestSegmentWAL_cut(t *testing.T) {

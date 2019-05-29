@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	client_testutil "github.com/prometheus/client_golang/prometheus/testutil"
-	"github.com/prometheus/tsdb/testutil"
+	client_testutil "github.com/dnxware/client_golang/dnxware/testutil"
+	"github.com/dnxware/tsdb/testutil"
 )
 
 func TestWAL_Repair(t *testing.T) {
@@ -45,7 +45,7 @@ func TestWAL_Repair(t *testing.T) {
 		},
 		// Ensures that the page buffer is big enough to fit
 		// an entire page size without panicing.
-		// https://github.com/prometheus/tsdb/pull/414
+		// https://github.com/dnxware/tsdb/pull/414
 		"bad_header": {
 			1,
 			func(f *os.File) {

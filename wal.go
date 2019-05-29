@@ -1,4 +1,4 @@
-// Copyright 2017 The Prometheus Authors
+// Copyright 2017 The dnxware Authors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
@@ -30,11 +30,11 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/pkg/errors"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/tsdb/encoding"
-	"github.com/prometheus/tsdb/fileutil"
-	"github.com/prometheus/tsdb/labels"
-	"github.com/prometheus/tsdb/wal"
+	"github.com/dnxware/client_golang/dnxware"
+	"github.com/dnxware/tsdb/encoding"
+	"github.com/dnxware/tsdb/fileutil"
+	"github.com/dnxware/tsdb/labels"
+	"github.com/dnxware/tsdb/wal"
 )
 
 // WALEntryType indicates what data a WAL entry contains.
@@ -57,19 +57,19 @@ const (
 )
 
 type walMetrics struct {
-	fsyncDuration prometheus.Summary
-	corruptions   prometheus.Counter
+	fsyncDuration dnxware.Summary
+	corruptions   dnxware.Counter
 }
 
-func newWalMetrics(wal *SegmentWAL, r prometheus.Registerer) *walMetrics {
+func newWalMetrics(wal *SegmentWAL, r dnxware.Registerer) *walMetrics {
 	m := &walMetrics{}
 
-	m.fsyncDuration = prometheus.NewSummary(prometheus.SummaryOpts{
-		Name: "prometheus_tsdb_wal_fsync_duration_seconds",
+	m.fsyncDuration = dnxware.NewSummary(dnxware.SummaryOpts{
+		Name: "dnxware_tsdb_wal_fsync_duration_seconds",
 		Help: "Duration of WAL fsync.",
 	})
-	m.corruptions = prometheus.NewCounter(prometheus.CounterOpts{
-		Name: "prometheus_tsdb_wal_corruptions_total",
+	m.corruptions = dnxware.NewCounter(dnxware.CounterOpts{
+		Name: "dnxware_tsdb_wal_corruptions_total",
 		Help: "Total number of WAL corruptions.",
 	})
 
@@ -181,7 +181,7 @@ type SegmentWAL struct {
 
 // OpenSegmentWAL opens or creates a write ahead log in the given directory.
 // The WAL must be read completely before new data is written.
-func OpenSegmentWAL(dir string, logger log.Logger, flushInterval time.Duration, r prometheus.Registerer) (*SegmentWAL, error) {
+func OpenSegmentWAL(dir string, logger log.Logger, flushInterval time.Duration, r dnxware.Registerer) (*SegmentWAL, error) {
 	if err := os.MkdirAll(dir, 0777); err != nil {
 		return nil, err
 	}
